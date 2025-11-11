@@ -1,4 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import { PinoLogger } from 'nestjs-pino';
 import { ItemService } from './item.service';
 import { IItemRepository } from '../repositories/item.repository.interface';
 import { Item } from '../entities/item.entity';
@@ -35,12 +36,25 @@ describe('ItemService', () => {
       remove: jest.fn(),
     };
 
+    const mockLogger = {
+      setContext: jest.fn(),
+      debug: jest.fn(),
+      info: jest.fn(),
+      warn: jest.fn(),
+      error: jest.fn(),
+      log: jest.fn(),
+    };
+
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         ItemService,
         {
           provide: 'IItemRepository',
           useValue: mockRepository,
+        },
+        {
+          provide: PinoLogger,
+          useValue: mockLogger,
         },
       ],
     }).compile();
