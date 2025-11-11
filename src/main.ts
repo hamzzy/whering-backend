@@ -70,7 +70,7 @@ async function bootstrap() {
       operationIdFactory: (controllerKey: string, methodKey: string) =>
         methodKey,
     });
-    SwaggerModule.setup('api/docs', app, document);
+    SwaggerModule.setup('docs', app, document);
   }
 
   const port = configService.get('app.port') || 3000;
