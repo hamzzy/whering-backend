@@ -28,7 +28,7 @@ export class AllExceptionsFilter implements ExceptionFilter {
           ? exception.message
           : 'Internal server error';
 
-    // Log unexpected errors
+    // Log unexpected errors (server-side only, never expose stack to client)
     if (!(exception instanceof HttpException)) {
       console.error('Unhandled exception:', {
         error: exception,
@@ -38,15 +38,16 @@ export class AllExceptionsFilter implements ExceptionFilter {
       });
     }
 
-    response.status(status).json({
+    // Clean error response - no stack traces ever (production-ready)
+    const errorResponse: any = {
       statusCode: status,
       timestamp: new Date().toISOString(),
       path: request.url,
-      message,
-      ...(process.env.NODE_ENV !== 'production' &&
-        exception instanceof Error && {
-          stack: exception.stack,
-        }),
-    });
+      message:
+        status === 404 ? 'The requested resource was not found.' : message,
+    };
+
+    // Never include stack traces in response - log server-side only
+    response.status(status).json(errorResponse);
   }
 }
