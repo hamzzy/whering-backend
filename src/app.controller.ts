@@ -1,17 +1,32 @@
 import { Controller, Get } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiOkResponse } from '@nestjs/swagger';
-import { AppService } from './app.service';
+import { ConfigService } from '@nestjs/config';
 
 @ApiTags('health')
 @Controller()
 export class AppController {
-  constructor(private readonly appService: AppService) {}
+  constructor(private readonly configService: ConfigService) {}
 
   @Get()
-  @ApiOperation({ summary: 'Get hello message' })
-  @ApiOkResponse({ description: 'Hello message', type: String })
-  getHello(): string {
-    return this.appService.getHello();
+  @ApiOperation({ summary: 'Get API information' })
+  @ApiOkResponse({
+    description: 'API address and version',
+    schema: {
+      type: 'object',
+      properties: {
+        name: { type: 'string', example: 'Digital Wardrobe API' },
+        version: { type: 'string', example: '1.0' },
+        address: { type: 'string', example: 'http://localhost:3000/api' },
+      },
+    },
+  })
+  getApiInfo() {
+    const port = this.configService.get('app.port') || 3000;
+    return {
+      name: 'Digital Wardrobe API',
+      version: '1.0',
+      address: `http://localhost:${port}/api`,
+    };
   }
 
   @Get('health')

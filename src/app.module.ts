@@ -4,7 +4,6 @@ import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
 import { APP_GUARD } from '@nestjs/core';
 import { LoggerModule } from 'nestjs-pino';
 import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { ItemModule } from './modules/items/item.module';
 import appConfig from './config/app.config';
 import { CorrelationIdMiddleware } from './common/middleware/correlation-id.middleware';
@@ -39,7 +38,6 @@ import { CorrelationIdMiddleware } from './common/middleware/correlation-id.midd
   ],
   controllers: [AppController],
   providers: [
-    AppService,
     {
       provide: APP_GUARD,
       useClass: ThrottlerGuard,

@@ -17,6 +17,7 @@ describe('ItemsController (e2e)', () => {
     }).compile();
 
     app = moduleFixture.createNestApplication();
+    app.setGlobalPrefix('api');
     app.useGlobalPipes(
       new ValidationPipe({
         transform: true,
@@ -49,7 +50,7 @@ describe('ItemsController (e2e)', () => {
       };
 
       return request(app.getHttpServer())
-        .post('/v1/items')
+        .post('/api/v1/items')
         .send(createItemDto)
         .expect(201)
         .expect((res) => {
@@ -71,7 +72,7 @@ describe('ItemsController (e2e)', () => {
       };
 
       return request(app.getHttpServer())
-        .post('/v1/items')
+        .post('/api/v1/items')
         .send(invalidDto)
         .expect(400);
     });
@@ -80,7 +81,7 @@ describe('ItemsController (e2e)', () => {
   describe('GET /items', () => {
     it('should return all items with pagination', () => {
       return request(app.getHttpServer())
-        .get('/v1/items')
+        .get('/api/v1/items')
         .expect(200)
         .expect((res) => {
           expect(res.body).toHaveProperty('data');
@@ -91,7 +92,7 @@ describe('ItemsController (e2e)', () => {
 
     it('should filter by user_id', () => {
       return request(app.getHttpServer())
-        .get('/v1/items?user_id=user-123')
+        .get('/api/v1/items?user_id=user-123')
         .expect(200)
         .expect((res) => {
           expect(res.body).toHaveProperty('data');
@@ -101,7 +102,7 @@ describe('ItemsController (e2e)', () => {
 
     it('should filter by category', () => {
       return request(app.getHttpServer())
-        .get(`/v1/items?category=${ItemCategory.TOPS}`)
+        .get(`/api/v1/items?category=${ItemCategory.TOPS}`)
         .expect(200)
         .expect((res) => {
           expect(res.body).toHaveProperty('data');
@@ -111,7 +112,7 @@ describe('ItemsController (e2e)', () => {
 
     it('should support pagination', () => {
       return request(app.getHttpServer())
-        .get('/v1/items?limit=10&offset=0')
+        .get('/api/v1/items?limit=10&offset=0')
         .expect(200)
         .expect((res) => {
           expect(res.body).toHaveProperty('data');
@@ -121,7 +122,7 @@ describe('ItemsController (e2e)', () => {
 
     it('should support sorting', () => {
       return request(app.getHttpServer())
-        .get('/v1/items?sort_by=purchase_date&sort_order=desc')
+        .get('/api/v1/items?sort_by=purchase_date&sort_order=desc')
         .expect(200)
         .expect((res) => {
           expect(res.body).toHaveProperty('data');
@@ -146,7 +147,7 @@ describe('ItemsController (e2e)', () => {
       };
 
       const response = await request(app.getHttpServer())
-        .post('/v1/items')
+        .post('/api/v1/items')
         .send(createItemDto)
         .expect(201);
 
@@ -155,7 +156,7 @@ describe('ItemsController (e2e)', () => {
 
     it('should return a single item', () => {
       return request(app.getHttpServer())
-        .get(`/v1/items/${createdItemId}`)
+        .get(`/api/v1/items/${createdItemId}`)
         .expect(200)
         .expect((res) => {
           expect(res.body).toHaveProperty('id', createdItemId);
@@ -166,7 +167,7 @@ describe('ItemsController (e2e)', () => {
 
     it('should return 404 for non-existent item', () => {
       return request(app.getHttpServer())
-        .get('/v1/items/non-existent-id')
+        .get('/api/v1/items/non-existent-id')
         .expect(404);
     });
   });
@@ -187,7 +188,7 @@ describe('ItemsController (e2e)', () => {
       };
 
       const response = await request(app.getHttpServer())
-        .post('/v1/items')
+        .post('/api/v1/items')
         .send(createItemDto)
         .expect(201);
 
@@ -201,7 +202,7 @@ describe('ItemsController (e2e)', () => {
       };
 
       return request(app.getHttpServer())
-        .patch(`/v1/items/${createdItemId}`)
+        .patch(`/api/v1/items/${createdItemId}`)
         .send(updateDto)
         .expect(200)
         .expect((res) => {
@@ -212,7 +213,7 @@ describe('ItemsController (e2e)', () => {
 
     it('should return 404 for non-existent item', () => {
       return request(app.getHttpServer())
-        .patch('/v1/items/non-existent-id')
+        .patch('/api/v1/items/non-existent-id')
         .send({ colour: 'red' })
         .expect(404);
     });
@@ -234,7 +235,7 @@ describe('ItemsController (e2e)', () => {
       };
 
       const response = await request(app.getHttpServer())
-        .post('/v1/items')
+        .post('/api/v1/items')
         .send(createItemDto)
         .expect(201);
 
@@ -243,13 +244,13 @@ describe('ItemsController (e2e)', () => {
 
     it('should delete an item', () => {
       return request(app.getHttpServer())
-        .delete(`/v1/items/${createdItemId}`)
+        .delete(`/api/v1/items/${createdItemId}`)
         .expect(204);
     });
 
     it('should return 404 for non-existent item', () => {
       return request(app.getHttpServer())
-        .delete('/v1/items/non-existent-id')
+        .delete('/api/v1/items/non-existent-id')
         .expect(404);
     });
   });

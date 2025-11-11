@@ -37,8 +37,8 @@ npm test
 npm run test:e2e
 ```
 
-The API will be available at `http://localhost:3000`
-Swagger documentation: `http://localhost:3000/api`
+The API will be available at `http://localhost:3000/api`
+Swagger documentation: `http://localhost:3000/docs`
 
 ### Docker
 
@@ -53,16 +53,17 @@ docker run -p 3000:3000 whering-test
 
 ## API Endpoints
 
-All endpoints are versioned. Use `/v1/` prefix for version 1:
+All endpoints are prefixed with `/api` and versioned with `/v1/`:
 
-- `POST /v1/items` - Create a clothing item
-- `GET /v1/items` - List items (with filtering, pagination, sorting)
-- `GET /v1/items/:id` - Get item details
-- `PATCH /v1/items/:id` - Update an item
-- `DELETE /v1/items/:id` - Delete an item
-- `GET /v1/health` - Health check
+- `GET /api/v1` - Get API information and address
+- `POST /api/v1/items` - Create a clothing item
+- `GET /api/v1/items` - List items (with filtering, pagination, sorting)
+- `GET /api/v1/items/:id` - Get item details
+- `PATCH /api/v1/items/:id` - Update an item
+- `DELETE /api/v1/items/:id` - Delete an item
+- `GET /api/v1/health` - Health check
 
-**Note**: Version 1 is the default, so `/items` also works but `/v1/items` is recommended for explicit versioning.
+**Note**: Swagger documentation is available at `/api/docs` (development only).
 
 ## Key Decisions & Assumptions
 
@@ -72,7 +73,7 @@ All endpoints are versioned. Use `/v1/` prefix for version 1:
 
 3. **Error handling**: Comprehensive try-catch in service layer with structured logging using Pino. Global exception filters for all error types.
 
-4. **Swagger documentation**: Full API documentation available at `/api` endpoint (disabled in production for security).
+4. **Swagger documentation**: Full API documentation available at `/docs` endpoint (disabled in production for security).
 
 5. **Timestamps**: Added `createdAt` and `updatedAt` to items for better tracking.
 

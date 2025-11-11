@@ -12,6 +12,7 @@ describe('AppController (e2e)', () => {
     }).compile();
 
     app = moduleFixture.createNestApplication();
+    app.setGlobalPrefix('api');
     app.enableVersioning({
       type: VersioningType.URI,
       defaultVersion: '1',
@@ -23,18 +24,20 @@ describe('AppController (e2e)', () => {
     await app.close();
   });
 
-  it('/v1 (GET)', () => {
+  it('/api/v1 (GET)', () => {
     return request(app.getHttpServer())
-      .get('/v1')
+      .get('/api/v1')
       .expect(200)
       .expect((res) => {
-        expect(typeof res.text).toBe('string');
+        expect(res.body).toHaveProperty('name');
+        expect(res.body).toHaveProperty('version');
+        expect(res.body).toHaveProperty('address');
       });
   });
 
   it('/health (GET)', () => {
     return request(app.getHttpServer())
-      .get('/v1/health')
+      .get('/api/v1/health')
       .expect(200)
       .expect((res) => {
         expect(res.body).toHaveProperty('status', 'ok');

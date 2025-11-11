@@ -18,43 +18,40 @@ async function bootstrap() {
 
   app.useLogger(logger);
 
-  // Security
   app.use(helmet());
 
-  // Global pipes
   app.useGlobalPipes(
     new ValidationPipe({
       transform: true,
-      whitelist: true, // Strip properties that don't have decorators
-      forbidNonWhitelisted: true, // Throw error if non-whitelisted properties are sent
+      whitelist: true,
+      forbidNonWhitelisted: true,
       transformOptions: {
         enableImplicitConversion: true,
       },
     }),
   );
 
-  // Global filters - order matters: more specific first
   app.useGlobalFilters(new HttpExceptionFilter(), new AllExceptionsFilter());
 
-  // API Versioning
+  // Set global prefix
+  app.setGlobalPrefix('api');
+
   app.enableVersioning({
     type: VersioningType.URI,
     defaultVersion: '1',
   });
 
-  // CORS
   const corsOrigin = configService.get('app.corsOrigin');
   app.enableCors({
     origin:
       process.env.NODE_ENV === 'production'
-        ? corsOrigin || false // Require explicit origin in production
-        : corsOrigin || '*', // Allow wildcard in development
+        ? corsOrigin || false
+        : corsOrigin || '*',
     credentials: true,
     methods: ['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
   });
 
-  // Swagger Documentation (only in non-production)
   if (process.env.NODE_ENV !== 'production') {
     const config = new DocumentBuilder()
       .setTitle('Digital Wardrobe API')
@@ -69,7 +66,7 @@ async function bootstrap() {
       operationIdFactory: (controllerKey: string, methodKey: string) =>
         methodKey,
     });
-    SwaggerModule.setup('api', app, document);
+    SwaggerModule.setup('docs', app, document);
   }
 
   const port = configService.get('app.port') || 3000;
@@ -78,7 +75,7 @@ async function bootstrap() {
   logger.log(`Application is running on: http://localhost:${port}`);
   if (process.env.NODE_ENV !== 'production') {
     logger.log(
-      `Swagger documentation available at: http://localhost:${port}/api`,
+      `Swagger documentation available at: http://localhost:${port}/api/docs`,
     );
   }
 
