@@ -66,7 +66,7 @@ async function bootstrap() {
       operationIdFactory: (controllerKey: string, methodKey: string) =>
         methodKey,
     });
-    SwaggerModule.setup('docs', app, document);
+    SwaggerModule.setup('api/docs', app, document);
   }
 
   const port = configService.get('app.port') || 3000;
@@ -75,7 +75,7 @@ async function bootstrap() {
   logger.log(`Application is running on: http://localhost:${port}`);
   if (process.env.NODE_ENV !== 'production') {
     logger.log(
-      `Swagger documentation available at: http://localhost:${port}/docs`,
+      `Swagger documentation available at: http://localhost:${port}/api/docs`,
     );
   }
 

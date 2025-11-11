@@ -1,4 +1,4 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Version } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiOkResponse } from '@nestjs/swagger';
 import { ConfigService } from '@nestjs/config';
 
@@ -8,6 +8,7 @@ export class AppController {
   constructor(private readonly configService: ConfigService) {}
 
   @Get()
+  @Version('1')
   @ApiOperation({ summary: 'Get API information' })
   @ApiOkResponse({
     description: 'API address and version',
@@ -30,6 +31,7 @@ export class AppController {
   }
 
   @Get('health')
+  @Version('1')
   @ApiOperation({ summary: 'Health check endpoint' })
   @ApiOkResponse({
     description: 'Health status',

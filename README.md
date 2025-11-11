@@ -37,7 +37,7 @@ npm test
 npm run test:e2e
 ```
 
-The API will be available at `http://localhost:3000/api`
+The API will be available at `http://localhost:3000/api/v1`
 Swagger documentation: `http://localhost:3000/docs`
 
 ### Docker
