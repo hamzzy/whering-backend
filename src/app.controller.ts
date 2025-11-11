@@ -1,12 +1,10 @@
-import { Controller, Get, Version } from '@nestjs/common';
+import { Controller, Get, Version, Req } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiOkResponse } from '@nestjs/swagger';
-import { ConfigService } from '@nestjs/config';
+import { Request } from 'express';
 
 @ApiTags('health')
 @Controller()
 export class AppController {
-  constructor(private readonly configService: ConfigService) {}
-
   @Get()
   @Version('1')
   @ApiOperation({ summary: 'Get API information' })
@@ -21,12 +19,22 @@ export class AppController {
       },
     },
   })
-  getApiInfo() {
-    const port = this.configService.get('app.port') || 3000;
+  getApiInfo(@Req() request: Request) {
+    // Handle reverse proxy (X-Forwarded-* headers)
+    const protocol =
+      request.get('x-forwarded-proto')?.split(',')[0]?.trim() ||
+      request.protocol ||
+      'http';
+    const host =
+      request.get('x-forwarded-host')?.split(',')[0]?.trim() ||
+      request.get('host') ||
+      'localhost:3000';
+    const baseUrl = `${protocol}://${host}`;
+
     return {
       name: 'Digital Wardrobe API',
       version: '1.0',
-      address: `http://localhost:${port}/api`,
+      address: `${baseUrl}/api`,
     };
   }
 

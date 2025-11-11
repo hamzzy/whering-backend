@@ -18,6 +18,10 @@ async function bootstrap() {
 
   app.useLogger(logger);
 
+  // Trust proxy for correct protocol/host detection behind reverse proxies
+  const expressApp = app.getHttpAdapter().getInstance();
+  expressApp.set('trust proxy', true);
+
   app.use(helmet());
 
   app.useGlobalPipes(
