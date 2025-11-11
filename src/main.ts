@@ -75,7 +75,7 @@ async function bootstrap() {
   logger.log(`Application is running on: http://localhost:${port}`);
   if (process.env.NODE_ENV !== 'production') {
     logger.log(
-      `Swagger documentation available at: http://localhost:${port}/api/docs`,
+      `Swagger documentation available at: http://localhost:${port}/docs`,
     );
   }
 
