@@ -15,17 +15,10 @@ A NestJS-based REST API for managing clothing items in a digital wardrobe platfo
 make install
 
 # Run in development mode
-make dev
+make start
 
 # Run tests
 make test
-
-# Build application
-make build
-
-# Docker commands
-make docker-build  # Build Docker image
-make docker-up     # Start with docker-compose
 ```
 
 ### Manual Commands

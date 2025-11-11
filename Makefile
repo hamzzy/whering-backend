@@ -1,7 +1,4 @@
-.PHONY: install dev build test lint docker-build docker-up clean
-
-install:
-	npm install
+.PHONY: dev build test start clean
 
 dev:
 	npm run start:dev
@@ -12,13 +9,7 @@ build:
 test:
 	npm test
 
-lint:
-	npm run lint
-
-docker-build:
-	docker-compose build
-
-docker-up:
+start:
 	docker-compose up
 
 clean:
