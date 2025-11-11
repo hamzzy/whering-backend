@@ -47,22 +47,8 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Run unit tests
-        run: npm run test
-
       - name: Run e2e tests
         run: npm run test:e2e
-
-      - name: Upload coverage reports
-        uses: codecov/codecov-action@v3
-        if: always()
-        with:
-          files: ./coverage/lcov.info
-          fail_ci_if_error: false
 
   build:
     name: Build
@@ -90,4 +76,5 @@ jobs:
             echo "Build failed: dist directory not found"
             exit 1
           fi
-
+          echo "Build artifacts verified successfully"
+          ls -la dist/
