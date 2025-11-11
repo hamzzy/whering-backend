@@ -5,7 +5,7 @@ import { CreateItemDto } from '../dtos/create-item.dto';
 import { UpdateItemDto } from '../dtos/update-item.dto';
 import { QueryItemsDto } from '../dtos/query-items.dto';
 import { IItemRepository, FindAllResult } from './item.repository.interface';
-import { ItemNotFoundException } from 'src/common/exceptions/item-not-found.exception';
+import { ItemNotFoundException } from '../../../common/exceptions/item-not-found.exception';
 
 @Injectable()
 export class InMemoryItemRepository implements IItemRepository {

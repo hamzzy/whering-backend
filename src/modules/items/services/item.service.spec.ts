@@ -3,7 +3,7 @@ import { ItemService } from './item.service';
 import { IItemRepository } from '../repositories/item.repository.interface';
 import { Item } from '../entities/item.entity';
 import { ItemCategory } from '../entities/item.entity';
-import { ItemNotFoundException } from 'src/common/exceptions/item-not-found.exception';
+import { ItemNotFoundException } from '../../../common/exceptions/item-not-found.exception';
 import { CreateItemDto } from '../dtos/create-item.dto';
 import { UpdateItemDto } from '../dtos/update-item.dto';
 import { QueryItemsDto } from '../dtos/query-items.dto';
@@ -22,6 +22,8 @@ describe('ItemService', () => {
     image_url: 'https://example.com/shirt.jpg',
     purchase_date: new Date('2024-01-15'),
     purchase_price: 89.99,
+    createdAt: new Date('2024-01-15'),
+    updatedAt: new Date('2024-01-15'),
   };
 
   beforeEach(async () => {

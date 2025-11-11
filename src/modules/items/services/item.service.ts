@@ -12,7 +12,7 @@ import {
   FindAllResult,
 } from '../repositories/item.repository.interface';
 import { Item } from '../entities/item.entity';
-import { ItemNotFoundException } from 'src/common/exceptions/item-not-found.exception';
+import { ItemNotFoundException } from '../../../common/exceptions/item-not-found.exception';
 
 @Injectable()
 export class ItemService {

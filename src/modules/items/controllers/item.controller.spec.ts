@@ -19,6 +19,8 @@ describe('ItemController', () => {
     image_url: 'https://example.com/shirt.jpg',
     purchase_date: new Date('2024-01-15'),
     purchase_price: 89.99,
+    createdAt: new Date('2024-01-15'),
+    updatedAt: new Date('2024-01-15'),
   };
 
   beforeEach(async () => {
