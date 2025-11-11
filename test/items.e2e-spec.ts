@@ -1,5 +1,9 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { INestApplication, ValidationPipe } from '@nestjs/common';
+import {
+  INestApplication,
+  ValidationPipe,
+  VersioningType,
+} from '@nestjs/common';
 import * as request from 'supertest';
 import { AppModule } from '../src/app.module';
 import { ItemCategory } from '../src/modules/items/entities/item.entity';
@@ -20,6 +24,10 @@ describe('ItemsController (e2e)', () => {
         forbidNonWhitelisted: true,
       }),
     );
+    app.enableVersioning({
+      type: VersioningType.URI,
+      defaultVersion: '1',
+    });
     await app.init();
   });
 
@@ -41,7 +49,7 @@ describe('ItemsController (e2e)', () => {
       };
 
       return request(app.getHttpServer())
-        .post('/items')
+        .post('/v1/items')
         .send(createItemDto)
         .expect(201)
         .expect((res) => {
@@ -63,7 +71,7 @@ describe('ItemsController (e2e)', () => {
       };
 
       return request(app.getHttpServer())
-        .post('/items')
+        .post('/v1/items')
         .send(invalidDto)
         .expect(400);
     });
@@ -72,7 +80,7 @@ describe('ItemsController (e2e)', () => {
   describe('GET /items', () => {
     it('should return all items with pagination', () => {
       return request(app.getHttpServer())
-        .get('/items')
+        .get('/v1/items')
         .expect(200)
         .expect((res) => {
           expect(res.body).toHaveProperty('data');
@@ -83,7 +91,7 @@ describe('ItemsController (e2e)', () => {
 
     it('should filter by user_id', () => {
       return request(app.getHttpServer())
-        .get('/items?user_id=user-123')
+        .get('/v1/items?user_id=user-123')
         .expect(200)
         .expect((res) => {
           expect(res.body).toHaveProperty('data');
@@ -93,7 +101,7 @@ describe('ItemsController (e2e)', () => {
 
     it('should filter by category', () => {
       return request(app.getHttpServer())
-        .get(`/items?category=${ItemCategory.TOPS}`)
+        .get(`/v1/items?category=${ItemCategory.TOPS}`)
         .expect(200)
         .expect((res) => {
           expect(res.body).toHaveProperty('data');
@@ -103,7 +111,7 @@ describe('ItemsController (e2e)', () => {
 
     it('should support pagination', () => {
       return request(app.getHttpServer())
-        .get('/items?limit=10&offset=0')
+        .get('/v1/items?limit=10&offset=0')
         .expect(200)
         .expect((res) => {
           expect(res.body).toHaveProperty('data');
@@ -113,7 +121,7 @@ describe('ItemsController (e2e)', () => {
 
     it('should support sorting', () => {
       return request(app.getHttpServer())
-        .get('/items?sort_by=purchase_date&sort_order=desc')
+        .get('/v1/items?sort_by=purchase_date&sort_order=desc')
         .expect(200)
         .expect((res) => {
           expect(res.body).toHaveProperty('data');
@@ -138,7 +146,7 @@ describe('ItemsController (e2e)', () => {
       };
 
       const response = await request(app.getHttpServer())
-        .post('/items')
+        .post('/v1/items')
         .send(createItemDto)
         .expect(201);
 
@@ -147,7 +155,7 @@ describe('ItemsController (e2e)', () => {
 
     it('should return a single item', () => {
       return request(app.getHttpServer())
-        .get(`/items/${createdItemId}`)
+        .get(`/v1/items/${createdItemId}`)
         .expect(200)
         .expect((res) => {
           expect(res.body).toHaveProperty('id', createdItemId);
@@ -158,7 +166,7 @@ describe('ItemsController (e2e)', () => {
 
     it('should return 404 for non-existent item', () => {
       return request(app.getHttpServer())
-        .get('/items/non-existent-id')
+        .get('/v1/items/non-existent-id')
         .expect(404);
     });
   });
@@ -179,7 +187,7 @@ describe('ItemsController (e2e)', () => {
       };
 
       const response = await request(app.getHttpServer())
-        .post('/items')
+        .post('/v1/items')
         .send(createItemDto)
         .expect(201);
 
@@ -193,7 +201,7 @@ describe('ItemsController (e2e)', () => {
       };
 
       return request(app.getHttpServer())
-        .patch(`/items/${createdItemId}`)
+        .patch(`/v1/items/${createdItemId}`)
         .send(updateDto)
         .expect(200)
         .expect((res) => {
@@ -204,7 +212,7 @@ describe('ItemsController (e2e)', () => {
 
     it('should return 404 for non-existent item', () => {
       return request(app.getHttpServer())
-        .patch('/items/non-existent-id')
+        .patch('/v1/items/non-existent-id')
         .send({ colour: 'red' })
         .expect(404);
     });
@@ -226,7 +234,7 @@ describe('ItemsController (e2e)', () => {
       };
 
       const response = await request(app.getHttpServer())
-        .post('/items')
+        .post('/v1/items')
         .send(createItemDto)
         .expect(201);
 
@@ -235,13 +243,13 @@ describe('ItemsController (e2e)', () => {
 
     it('should delete an item', () => {
       return request(app.getHttpServer())
-        .delete(`/items/${createdItemId}`)
+        .delete(`/v1/items/${createdItemId}`)
         .expect(204);
     });
 
     it('should return 404 for non-existent item', () => {
       return request(app.getHttpServer())
-        .delete('/items/non-existent-id')
+        .delete('/v1/items/non-existent-id')
         .expect(404);
     });
   });

@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { INestApplication } from '@nestjs/common';
+import { INestApplication, VersioningType } from '@nestjs/common';
 import * as request from 'supertest';
 import { AppModule } from '../src/app.module';
 
@@ -12,6 +12,10 @@ describe('AppController (e2e)', () => {
     }).compile();
 
     app = moduleFixture.createNestApplication();
+    app.enableVersioning({
+      type: VersioningType.URI,
+      defaultVersion: '1',
+    });
     await app.init();
   });
 
@@ -19,9 +23,9 @@ describe('AppController (e2e)', () => {
     await app.close();
   });
 
-  it('/ (GET)', () => {
+  it('/v1 (GET)', () => {
     return request(app.getHttpServer())
-      .get('/')
+      .get('/v1')
       .expect(200)
       .expect((res) => {
         expect(typeof res.text).toBe('string');
@@ -30,7 +34,7 @@ describe('AppController (e2e)', () => {
 
   it('/health (GET)', () => {
     return request(app.getHttpServer())
-      .get('/health')
+      .get('/v1/health')
       .expect(200)
       .expect((res) => {
         expect(res.body).toHaveProperty('status', 'ok');

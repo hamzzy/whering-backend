@@ -53,12 +53,16 @@ docker run -p 3000:3000 whering-test
 
 ## API Endpoints
 
-- `POST /items` - Create a clothing item
-- `GET /items` - List items (with filtering, pagination, sorting)
-- `GET /items/:id` - Get item details
-- `PATCH /items/:id` - Update an item
-- `DELETE /items/:id` - Delete an item
-- `GET /health` - Health check
+All endpoints are versioned. Use `/v1/` prefix for version 1:
+
+- `POST /v1/items` - Create a clothing item
+- `GET /v1/items` - List items (with filtering, pagination, sorting)
+- `GET /v1/items/:id` - Get item details
+- `PATCH /v1/items/:id` - Update an item
+- `DELETE /v1/items/:id` - Delete an item
+- `GET /v1/health` - Health check
+
+**Note**: Version 1 is the default, so `/items` also works but `/v1/items` is recommended for explicit versioning.
 
 ## Key Decisions & Assumptions
 
@@ -66,15 +70,17 @@ docker run -p 3000:3000 whering-test
 
 2. **Repository pattern**: Used interface-based repository abstraction for easy database migration later.
 
-3. **Error handling**: Comprehensive try-catch in service layer with structured logging using Pino.
+3. **Error handling**: Comprehensive try-catch in service layer with structured logging using Pino. Global exception filters for all error types.
 
-4. **Swagger documentation**: Full API documentation available at `/api` endpoint.
+4. **Swagger documentation**: Full API documentation available at `/api` endpoint (disabled in production for security).
 
 5. **Timestamps**: Added `createdAt` and `updatedAt` to items for better tracking.
 
-6. **Validation**: Request validation using `class-validator` with DTOs.
+6. **Validation**: Request validation using `class-validator` with DTOs. Whitelist mode enabled to reject unknown properties.
 
-7. **Security**: Helmet, rate limiting, and CORS configured.
+7. **Security**: Helmet, rate limiting, and CORS configured. Production-ready with environment-specific settings.
+
+8. **Production features**: Graceful shutdown, correlation IDs, comprehensive error handling, and environment-aware configuration.
 
 ## Tech Stack
 

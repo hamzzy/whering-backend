@@ -9,6 +9,7 @@ import {
   HttpCode,
   HttpStatus,
   Query,
+  Version,
 } from '@nestjs/common';
 import {
   ApiTags,
@@ -27,11 +28,12 @@ import { QueryItemsDto } from '../dtos/query-items.dto';
 import { ItemDto, ItemResponseDto } from '../dtos/item-response.dto';
 
 @ApiTags('items')
-@Controller('items')
+@Controller({ path: 'items', version: '1' })
 export class ItemController {
   constructor(private readonly itemService: ItemService) {}
 
   @Post()
+  @Version('1')
   @ApiOperation({ summary: 'Create a new clothing item' })
   @ApiCreatedResponse({
     description: 'The item has been successfully created.',
@@ -44,6 +46,7 @@ export class ItemController {
   }
 
   @Get()
+  @Version('1')
   @ApiOperation({
     summary: 'List all clothing items with filtering, pagination, and sorting',
   })
@@ -61,6 +64,7 @@ export class ItemController {
   }
 
   @Get(':id')
+  @Version('1')
   @ApiOperation({ summary: 'Get a single item by ID' })
   @ApiParam({
     name: 'id',
@@ -78,6 +82,7 @@ export class ItemController {
   }
 
   @Patch(':id')
+  @Version('1')
   @ApiOperation({ summary: 'Update an existing item' })
   @ApiParam({
     name: 'id',
@@ -96,6 +101,7 @@ export class ItemController {
   }
 
   @Delete(':id')
+  @Version('1')
   @ApiOperation({ summary: 'Delete an item' })
   @ApiParam({
     name: 'id',
